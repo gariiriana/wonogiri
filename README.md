@@ -429,15 +429,5 @@ Built with:
 ---
 
 **Happy Managing! 🚀**
-
----
-
-## 📞 Quick Links
-
-- [Firebase Console](https://console.firebase.google.com)
-- [Firebase Docs](https://firebase.google.com/docs)
 - [React Docs](https://react.dev)
 - [Tailwind Docs](https://tailwindcss.com)
-#   w o n o g i r i 
- 
- 
