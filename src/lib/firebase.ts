@@ -3,13 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, initializeFirestore, memoryLocalCache } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBnn2qaklOv3i5rc_j2RvCtITinZnITI0s",
-  authDomain: "wonogiri-56280.firebaseapp.com",
-  projectId: "wonogiri-56280",
-  storageBucket: "wonogiri-56280.firebasestorage.app",
-  messagingSenderId: "664243681026",
-  appId: "1:664243681026:web:d938a0177fd553e779741b",
-  measurementId: "G-GBLFYK8SYB"
+  apiKey: "AIzaSyA5COjUKUcVK6DjsLWF9j7IR0nsg9dzHQY",
+  authDomain: "wonogiri-8e0eb.firebaseapp.com",
+  projectId: "wonogiri-8e0eb",
+  storageBucket: "wonogiri-8e0eb.firebasestorage.app",
+  messagingSenderId: "4415449174",
+  appId: "1:4415449174:web:38b65b3a426aa70c8073f7",
+  measurementId: "G-HEQS28TT51"
 };
 
 // Initialize Firebase only if not already initialized

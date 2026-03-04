@@ -8,11 +8,6 @@ service cloud.firestore {
       return request.auth != null;
     }
     
-    // Helper function to check if user owns the document
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
-    }
-    
     // Users collection rules - auto-created on login
     match /users/{userId} {
       // Allow read if authenticated and user owns the document
