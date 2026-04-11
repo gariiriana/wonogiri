@@ -6,65 +6,100 @@
     <title>{% block title %}Wonogiri - Catatan Utang Warung{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    {% load static %}
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
+        
+        .glass-header {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .hero-bg {
+            background-image: url('{% static "images/hero_bg.png" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .tab-link {
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab-active {
+            background: white !important;
+            color: #f97316 !important;
+            box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.2);
+        }
+
+        .tab-inactive {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(4px);
+        }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen {% if user.is_authenticated %}bg-[url('/static/images/dashboard_bg.png')] bg-fixed bg-cover{% endif %}">
+<body class="bg-gray-100">
     {% if user.is_authenticated %}
-    <div class="flex flex-col md:flex-row min-h-screen backdrop-blur-[2px] bg-white/40">
-        <!-- Sidebar -->
-        <aside class="w-full md:w-64 bg-white border-r border-gray-200">
-            <div class="p-6">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white">
-                        <i data-lucide="store" class="w-6 h-6"></i>
+    <div class="hero-bg flex flex-col">
+        <!-- Glass Header -->
+        <header class="glass-header w-full">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-orange-500">
+                        <i data-lucide="wallet" class="w-7 h-7"></i>
                     </div>
                     <div>
-                        <h1 class="font-bold text-gray-900 tracking-tight">Wonogiri</h1>
-                        <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest">Debt Records</p>
+                        <h1 class="text-xl font-extrabold text-white tracking-tight drop-shadow-sm">Catatan Utang Warung</h1>
+                        <p class="text-[11px] text-gray-100 font-semibold uppercase tracking-wider opacity-80">Kelola keuangan dengan mudah & profesional</p>
                     </div>
                 </div>
 
-                <nav class="space-y-1">
-                    <a href="{% url 'debt_management:dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {% if active_tab == 'dashboard' %}bg-orange-50 text-orange-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50{% endif %}">
-                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                        Dashboard
-                    </a>
-                    <a href="{% url 'debt_management:debtor_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {% if active_tab == 'debtors' %}bg-orange-50 text-orange-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50{% endif %}">
-                        <i data-lucide="users" class="w-5 h-5"></i>
-                        Daftar Utang
-                    </a>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-gray-600 hover:bg-gray-50">
-                        <i data-lucide="file-text" class="w-5 h-5"></i>
-                        Rekap
-                    </a>
-                </nav>
-            </div>
-
-            <div class="mt-auto p-6 border-t border-gray-100">
-                <div class="flex items-center gap-3 mb-4 p-2 rounded-xl bg-gray-50">
-                    <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 overflow-hidden">
-                        <i data-lucide="user" class="w-6 h-6"></i>
-                    </div>
-                    <div class="flex-1 overflow-hidden">
-                        <p class="text-sm font-semibold text-gray-900 truncate">{{ user.username }}</p>
-                        <p class="text-[10px] text-gray-500 truncate">{{ user.email }}</p>
-                    </div>
-                </div>
                 <form action="{% url 'debt_management:logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                    <button type="submit" class="flex items-center gap-2 px-5 py-2.5 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl backdrop-blur-md border border-white/30 transition-all text-sm">
                         <i data-lucide="log-out" class="w-4 h-4"></i>
                         Keluar
                     </button>
                 </form>
             </div>
-        </aside>
+
+            <!-- Tab Navigation -->
+            <div class="max-w-7xl mx-auto px-6 pb-6">
+                <nav class="flex flex-wrap gap-4">
+                    <a href="{% url 'debt_management:dashboard' %}" 
+                       class="tab-link flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'dashboard' %}tab-active{% else %}tab-inactive{% endif %}">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                        Dashboard
+                    </a>
+                    <button onclick="toggleModal('addDebtorModal')" 
+                       class="tab-link flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'add_debt' %}tab-active{% else %}tab-inactive{% endif %}">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        Catat Utang
+                    </button>
+                    <a href="{% url 'debt_management:debtor_list' %}" 
+                       class="tab-link flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'debtors' %}tab-active{% else %}tab-inactive{% endif %}">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        Daftar Utang
+                    </a>
+                    <a href="{% url 'debt_management:recap_view' %}" 
+                       class="tab-link flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'recap' %}tab-active{% else %}tab-inactive{% endif %}">
+                        <i data-lucide="line-chart" class="w-5 h-5"></i>
+                        Rekap Keuangan
+                    </a>
+                </nav>
+            </div>
+        </header>
 
         <!-- Main Content -->
-        <main class="flex-1 p-4 md:p-8">
+        <main class="flex-1 max-w-7xl mx-auto w-full px-6 py-8">
             {% block content %}{% endblock %}
         </main>
     </div>
@@ -72,8 +107,15 @@
         {% block auth_content %}{% endblock %}
     {% endif %}
 
+    <!-- Global Scripts -->
     <script>
         lucide.createIcons();
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.toggle('hidden');
+            }
+        }
     </script>
 </body>
 </html>

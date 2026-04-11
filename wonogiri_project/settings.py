@@ -132,7 +132,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise storage
 STORAGES = {
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
