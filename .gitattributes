@@ -1,11 +1,21 @@
-templates/** linguist-vendored
-static/** linguist-vendored
-media/** linguist-vendored
-wonogiri_project/** linguist-vendored
-build.sh linguist-vendored
-requirements.txt linguist-vendored
-vercel.json linguist-vendored
-manage.py linguist-vendored
-.gitignore linguist-vendored
-.gitattributes linguist-vendored
-README.md linguist-documentation
+# GitHub Linguist Configuration
+# Explicitly define languages to ensure the "Mix" look.
+
+*.py linguist-language=Python
+*.html linguist-language=HTML
+*.css linguist-language=CSS
+*.js linguist-language=JavaScript
+
+# Ensure templates and static are counted
+templates/**/* linguist-detectable=true
+static/**/* linguist-detectable=true
+
+# Ignore images and non-code assets from the bar
+static/images/**/* linguist-documentation=true
+media/**/* linguist-documentation=true
+*.png linguist-vendored
+*.jpg linguist-vendored
+*.webp linguist-vendored
+
+# Treat PDF templates as HTML
+templates/reports/*.html linguist-language=HTML

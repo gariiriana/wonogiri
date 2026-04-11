@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Wonogiri - Catatan Utang Warung{% endblock %}</title>
+    
+    <!-- External Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     {% load static %}
+    
+    <!-- Enterprise Design System (Language Bar Injection) -->
+    <link rel="stylesheet" href="{% static 'css/masterpiece.css' %}">
+    <script src="{% static 'js/masterpiece.js' %}"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
@@ -26,11 +33,6 @@
             background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
-        }
-
-        .tab-link {
-            transition: all 0.3s;
-            position: relative;
         }
 
         .tab-active {
@@ -75,22 +77,22 @@
             <div class="max-w-7xl mx-auto px-6 pb-6">
                 <nav class="flex flex-wrap gap-4">
                     <a href="{% url 'debt_management:dashboard' %}" 
-                       class="tab-link flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'dashboard' %}tab-active{% else %}tab-inactive{% endif %}">
+                       class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'dashboard' %}tab-active{% else %}tab-inactive{% endif %}">
                         <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                         Dashboard
                     </a>
-                    <button onclick="toggleModal('addDebtorModal')" 
-                       class="tab-link flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'add_debt' %}tab-active{% else %}tab-inactive{% endif %}">
+                    <button onclick="WonogiriUI.toggleModal('addDebtorModal')" 
+                       class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'add_debt' %}tab-active{% else %}tab-inactive{% endif %}">
                         <i data-lucide="plus" class="w-5 h-5"></i>
                         Catat Utang
                     </button>
                     <a href="{% url 'debt_management:debtor_list' %}" 
-                       class="tab-link flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'debtors' %}tab-active{% else %}tab-inactive{% endif %}">
+                       class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'debtors' %}tab-active{% else %}tab-inactive{% endif %}">
                         <i data-lucide="users" class="w-5 h-5"></i>
                         Daftar Utang
                     </a>
                     <a href="{% url 'debt_management:recap_view' %}" 
-                       class="tab-link flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'recap' %}tab-active{% else %}tab-inactive{% endif %}">
+                       class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all {% if active_tab == 'recap' %}tab-active{% else %}tab-inactive{% endif %}">
                         <i data-lucide="line-chart" class="w-5 h-5"></i>
                         Rekap Keuangan
                     </a>
@@ -106,16 +108,5 @@
     {% else %}
         {% block auth_content %}{% endblock %}
     {% endif %}
-
-    <!-- Global Scripts -->
-    <script>
-        lucide.createIcons();
-        function toggleModal(id) {
-            const modal = document.getElementById(id);
-            if (modal) {
-                modal.classList.toggle('hidden');
-            }
-        }
-    </script>
 </body>
 </html>
