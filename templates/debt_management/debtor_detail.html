@@ -119,93 +119,149 @@
     </div>
 </div>
 
-<!-- Modal System (Matching Screenshot 7, 8, 9) -->
+<!-- Modal System (Exact Replication of Reference Site) -->
 
-<!-- Payment Method Select Modal (Screenshot 7) -->
+<!-- Payment Method Select Modal (Selection Choice) -->
 <div id="paymentMethodModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="toggleModal('paymentMethodModal')"></div>
-    <div class="bg-white rounded-[2.5rem] w-full max-w-md relative shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-        <div class="bg-[#00CE63] p-8 text-white flex justify-between items-start">
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="WonogiriUI.toggleModal('paymentMethodModal')"></div>
+    <div class="bg-white rounded-[2rem] w-full max-w-md relative shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+        <div class="bg-gradient-to-r from-blue-700 to-blue-500 p-8 text-white flex justify-between items-start">
             <div>
-                <h3 class="text-2xl font-black">Pilih Metode Pembayaran</h3>
-                <p class="text-green-50 text-sm font-bold opacity-90">{{ debtor.name }} - Total Utang: Rp {{ debtor.total_debt|floatformat:0 }}</p>
+                <h3 class="text-2xl font-black">Pilih Pembayaran</h3>
+                <p class="text-blue-50 text-xs font-bold opacity-80 mt-1">{{ debtor.name }}</p>
             </div>
-            <button onclick="toggleModal('paymentMethodModal')" class="text-white hover:opacity-70"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="WonogiriUI.toggleModal('paymentMethodModal')" class="text-white hover:opacity-70 transition-opacity">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
         </div>
         <div class="p-8 space-y-4">
-            <button onclick="toggleModal('paymentMethodModal'); toggleModal('partialPaymentModal')" class="w-full p-6 bg-blue-500 hover:bg-blue-600 rounded-3xl text-left flex items-center gap-6 transition-all group">
-                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-white shrink-0"><i data-lucide="credit-card" class="w-8 h-8"></i></div>
+            <!-- Bayar Sebagian -->
+            <button onclick="WonogiriUI.openPartialPaymentFromChoice({{ debtor.total_debt }})" 
+                    class="w-full p-6 bg-gradient-to-br from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 rounded-[1.5rem] text-left flex items-center gap-6 shadow-lg shadow-blue-500/20 transition-all transform active:scale-[0.98] group">
+                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
+                    <i data-lucide="credit-card" class="w-8 h-8"></i>
+                </div>
                 <div class="text-white">
                     <p class="text-xl font-black">Bayar Sebagian</p>
-                    <p class="text-xs font-bold text-blue-100">Cicilan / Pembayaran parsial</p>
+                    <p class="text-xs font-bold text-blue-100 opacity-80">Cicilan / Bayar sebagian</p>
                 </div>
             </button>
-            <form action="{% url 'debt_management:add_transaction' debtor.pk %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="type" value="PAYMENT">
-                <input type="hidden" name="amount" value="{{ debtor.total_debt }}">
-                <input type="hidden" name="note" value="Pelunasan seluruh utang">
-                <button type="submit" class="w-full p-6 bg-[#00CE63] hover:bg-green-600 rounded-3xl text-left flex items-center gap-6 transition-all group">
-                    <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-white shrink-0"><i data-lucide="check-circle-2" class="w-8 h-8"></i></div>
-                    <div class="text-white">
-                        <p class="text-xl font-black">Lunas Semua</p>
-                        <p class="text-xs font-bold text-green-100">Bayar seluruh utang</p>
-                    </div>
-                </button>
-            </form>
-            <button onclick="toggleModal('paymentMethodModal')" class="w-full py-4 text-gray-400 font-bold hover:text-gray-600 transition-colors">Batal</button>
+            
+            <!-- Lunas Semua -->
+            <button onclick="WonogiriUI.toggleModal('paymentMethodModal'); WonogiriUI.toggleModal('fullPaymentConfirmModal')" 
+                    class="w-full p-6 bg-gradient-to-br from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 rounded-[1.5rem] text-left flex items-center gap-6 shadow-lg shadow-green-500/20 transition-all transform active:scale-[0.98] group">
+                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
+                    <i data-lucide="check-circle" class="w-8 h-8"></i>
+                </div>
+                <div class="text-white">
+                    <p class="text-xl font-black">Lunas Semua</p>
+                    <p class="text-xs font-bold text-green-100 opacity-80">Lunasi seluruh utang</p>
+                </div>
+            </button>
+
+            <button onclick="WonogiriUI.toggleModal('paymentMethodModal')" class="w-full py-4 text-gray-400 font-bold hover:text-gray-600 transition-colors text-sm">Batal</button>
         </div>
     </div>
 </div>
 
-<!-- Partial Payment Modal (Screenshot 8) -->
+<!-- Partial Payment Modal (Input Amount) -->
 <div id="partialPaymentModal" class="hidden fixed inset-0 z-[210] flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="toggleModal('partialPaymentModal')"></div>
-    <div class="bg-white rounded-[2.5rem] w-full max-w-md relative shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-        <div class="bg-blue-500 p-8 text-white flex justify-between items-start">
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="WonogiriUI.toggleModal('partialPaymentModal')"></div>
+    <div class="bg-white rounded-[2rem] w-full max-w-md relative shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-500 p-8 text-white flex justify-between items-start">
             <div class="flex gap-4">
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center"><i data-lucide="credit-card" class="w-6 h-6"></i></div>
+                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shadow-inner">
+                    <i data-lucide="credit-card" class="w-6 h-6"></i>
+                </div>
                 <div>
-                    <h3 class="text-2xl font-black">Bayar Sebagian</h3>
-                    <p class="text-blue-50 text-sm font-bold">{{ debtor.name }}</p>
+                    <h3 class="text-2xl font-black tracking-tight">Bayar Sebagian</h3>
+                    <p class="text-blue-50 text-[10px] font-bold uppercase tracking-widest opacity-80">{{ debtor.name }}</p>
                 </div>
             </div>
-            <button onclick="toggleModal('partialPaymentModal')" class="text-white hover:opacity-70"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="WonogiriUI.toggleModal('partialPaymentModal')" class="text-white hover:opacity-70 transition-opacity">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
         </div>
         <form action="{% url 'debt_management:add_transaction' debtor.pk %}" method="post" class="p-8 space-y-6">
             {% csrf_token %}
             <input type="hidden" name="type" value="PAYMENT">
-            <div class="bg-red-50 rounded-2xl p-6 border border-red-100/50 space-y-1">
-                <p class="text-[10px] font-black text-red-500 uppercase tracking-widest">Total Utang Saat Ini</p>
-                <p class="text-3xl font-black text-red-600">Rp {{ debtor.total_debt|floatformat:0 }}</p>
+            
+            <!-- Warning Box (Matching Reference Exactly) -->
+            <div class="bg-red-50 rounded-2xl p-6 border border-red-100 space-y-1">
+                <p class="text-[10px] font-black text-red-400 uppercase tracking-widest">Total Utang Saat Ini</p>
+                <p class="text-3xl font-black text-red-600 tabular-nums">Rp {{ debtor.total_debt|floatformat:0 }}</p>
             </div>
-            <div class="space-y-2">
-                <label class="block text-xs font-black text-gray-500 uppercase tracking-widest">Jumlah Pembayaran</label>
-                <div class="relative">
-                    <input type="number" name="amount" required placeholder="0" class="w-full border-2 border-blue-500 rounded-2xl py-6 px-10 text-4xl font-black text-gray-900 focus:outline-none transition-all text-center">
-                    <span class="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold">Rp</span>
+
+            <div class="space-y-3">
+                <label class="block text-[11px] font-black text-gray-400 uppercase tracking-widest">Jumlah Pembayaran</label>
+                <div class="relative group">
+                    <div class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 font-black text-xl group-focus-within:text-blue-500 transition-colors">Rp</div>
+                    <input type="number" name="amount" required placeholder="0" 
+                           class="w-full border-2 border-gray-100 focus:border-blue-500 rounded-2xl py-6 px-16 text-4xl font-black text-gray-900 focus:outline-none transition-all tabular-nums placeholder:text-gray-100 shadow-sm">
+                    <div class="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-blue-500 bg-blue-50 px-2 py-1 rounded">CASH</div>
+                </div>
+                <!-- Mini calc line -->
+                <div class="flex justify-between items-center px-1">
+                    <p class="text-[10px] font-bold text-gray-300">Sisa utang setelah bayar:</p>
+                    <p id="remainingDebtLabel" class="text-[10px] font-black text-gray-400">Menghitung...</p>
                 </div>
             </div>
-            <div class="flex gap-4">
-                <button type="button" onclick="toggleModal('partialPaymentModal')" class="flex-1 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-black rounded-2xl transition-all">Batal</button>
-                <button type="submit" class="flex-1 py-4 bg-blue-500 hover:bg-blue-600 text-white font-black rounded-2xl shadow-xl shadow-blue-500/30 transition-all">Konfirmasi</button>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button type="button" onclick="WonogiriUI.toggleModal('partialPaymentModal')" class="py-4 bg-gray-50 hover:bg-gray-100 text-gray-500 font-black rounded-2xl transition-all border border-gray-100">Batal</button>
+                <button type="submit" class="py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-black rounded-2xl shadow-xl shadow-blue-500/30 transition-all">Konfirmasi</button>
             </div>
+        </form>
+    </div>
+</div>
+
+<!-- Full Payment Confirmation Modal (The "Greencheck" Dialog) -->
+<div id="fullPaymentConfirmModal" class="hidden fixed inset-0 z-[220] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="WonogiriUI.toggleModal('fullPaymentConfirmModal')"></div>
+    <div class="bg-white rounded-[2.5rem] w-full max-w-sm relative shadow-2xl p-10 animate-in zoom-in-95 duration-300">
+        <button onclick="WonogiriUI.toggleModal('fullPaymentConfirmModal')" class="absolute right-6 top-6 text-gray-300 hover:text-gray-500 transition-colors">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        
+        <!-- Large Success Icon -->
+        <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-8 relative">
+            <div class="absolute inset-0 rounded-full border-4 border-green-100 animate-ping opacity-20"></div>
+            <div class="w-20 h-20 bg-green-100/50 rounded-full flex items-center justify-center">
+                <i data-lucide="check" class="w-12 h-12 text-green-600"></i>
+            </div>
+        </div>
+
+        <div class="text-center space-y-3 mb-10">
+            <h3 class="text-2xl font-black text-gray-900 tracking-tight leading-tight">Konfirmasi Pelunasan</h3>
+            <p class="text-gray-500 font-bold text-sm px-2">Lunasi semua utang {{ debtor.name }} senilai <span class="text-green-600">Rp {{ debtor.total_debt|floatformat:0 }}</span>?</p>
+        </div>
+
+        <form action="{% url 'debt_management:add_transaction' debtor.pk %}" method="post" class="grid grid-cols-2 gap-4">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="PAYMENT">
+            <input type="hidden" name="amount" value="{{ debtor.total_debt }}">
+            <input type="hidden" name="note" value="Pelunasan seluruh utang via konfirmasi sistem">
+            
+            <button type="button" onclick="WonogiriUI.toggleModal('fullPaymentConfirmModal')" 
+                    class="py-4 bg-gray-100 hover:bg-gray-200 text-gray-600 font-black rounded-2xl transition-all">Batal</button>
+            <button type="submit" 
+                    class="py-4 bg-[#16a34a] hover:bg-green-700 text-white font-black rounded-2xl shadow-xl shadow-green-500/30 transition-all">Ya, Lunas</button>
         </form>
     </div>
 </div>
 
 <!-- Delete Confirm Modal (Screenshot 9) -->
 <div id="deleteConfirmModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="toggleModal('deleteConfirmModal')"></div>
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="WonogiriUI.toggleModal('deleteConfirmModal')"></div>
     <div class="bg-white rounded-[2.5rem] w-full max-w-sm relative shadow-2xl p-10 text-center animate-in zoom-in-95 duration-300">
-        <button onclick="toggleModal('deleteConfirmModal')" class="absolute right-6 top-6 text-gray-300 hover:text-gray-500 transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+        <button onclick="WonogiriUI.toggleModal('deleteConfirmModal')" class="absolute right-6 top-6 text-gray-300 hover:text-gray-500 transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
         <div class="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <i data-lucide="x-circle" class="w-12 h-12"></i>
         </div>
         <h3 class="text-2xl font-black text-gray-900 mb-2">Konfirmasi Penghapusan</h3>
         <p class="text-gray-500 font-bold text-sm mb-8">Hapus pelanggan {{ debtor.name }}?</p>
         <div class="grid grid-cols-2 gap-4">
-            <button onclick="toggleModal('deleteConfirmModal')" class="py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-black rounded-2xl transition-all">Batal</button>
+            <button onclick="WonogiriUI.toggleModal('deleteConfirmModal')" class="py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-black rounded-2xl transition-all">Batal</button>
             <form action="{% url 'debt_management:delete_debtor' debtor.pk %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="w-full py-4 bg-[#FF2D55] hover:bg-red-700 text-white font-black rounded-2xl shadow-xl shadow-red-500/30 transition-all">Ya, Hapus</button>
@@ -216,14 +272,14 @@
 
 <!-- Add Debt Modal for Detail View -->
 <div id="addTransactionModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="toggleModal('addTransactionModal')"></div>
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="WonogiriUI.toggleModal('addTransactionModal')"></div>
     <div class="bg-white rounded-[2.5rem] w-full max-w-lg relative shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
         <div class="bg-[#FF6600] p-8 text-white flex justify-between items-start">
             <div>
                 <h3 class="text-2xl font-black">Tambah Utang Baru</h3>
                 <p class="text-orange-50 text-sm font-bold">Catat transaksi utang {{ debtor.name }}</p>
             </div>
-            <button onclick="toggleModal('addTransactionModal')" class="text-white hover:opacity-70"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <button onclick="WonogiriUI.toggleModal('addTransactionModal')" class="text-white hover:opacity-70"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
         <form action="{% url 'debt_management:add_transaction' debtor.pk %}" method="post" class="p-8 space-y-6">
             {% csrf_token %}
@@ -240,7 +296,7 @@
                 <textarea name="note" rows="3" placeholder="Contoh: Beli beras sama gas" class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl py-4 px-5 focus:border-orange-500 focus:outline-none transition-all font-bold text-gray-900 resize-none"></textarea>
             </div>
             <div class="flex gap-4">
-                <button type="button" onclick="toggleModal('addTransactionModal')" class="flex-1 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-black rounded-2xl transition-all">Batal</button>
+                <button type="button" onclick="WonogiriUI.toggleModal('addTransactionModal')" class="flex-1 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-black rounded-2xl transition-all">Batal</button>
                 <button type="submit" class="flex-1 py-4 bg-orange-600 hover:bg-orange-700 text-white font-black rounded-2xl shadow-xl shadow-orange-500/30 transition-all">Simpan</button>
             </div>
         </form>

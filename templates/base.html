@@ -19,8 +19,8 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; padding: 0; }
         
         .glass-header {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             position: sticky;
             top: 0;
@@ -36,63 +36,77 @@
         }
 
         .tab-active {
-            background: white !important;
-            color: #f97316 !important;
-            box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.2);
+            background: #FFFFFF !important;
+            color: #EA580C !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+            transform: translateY(-2px);
         }
 
         .tab-inactive {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            backdrop-filter: blur(4px);
+            background: rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        .tab-inactive:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-gray-100">
     {% if user.is_authenticated %}
     <div class="hero-bg flex flex-col">
-        <!-- Glass Header -->
+        <!-- Modern Glass Header -->
         <header class="glass-header w-full">
             <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-                <div class="flex items-center gap-3 md:gap-4 min-w-0">
-                    <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-orange-500 shrink-0">
-                        <i data-lucide="wallet" class="w-6 h-6 md:w-7 md:h-7"></i>
+                <div class="flex items-center gap-4 min-w-0">
+                    <div class="w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-orange-600 shrink-0 transform -rotate-3">
+                        <i data-lucide="wallet" class="w-7 h-7"></i>
                     </div>
                     <div class="min-w-0">
-                        <h1 class="text-lg md:text-xl font-extrabold text-white tracking-tight drop-shadow-sm truncate">Catatan Utang Warung</h1>
-                        <p class="text-[9px] md:text-[11px] text-gray-100 font-semibold uppercase tracking-wider opacity-80 truncate">Kelola keuangan dengan profesional</p>
+                        <h1 class="text-xl md:text-2xl font-black text-white tracking-tight drop-shadow-md truncate">Wonogiri Enterprise</h1>
+                        <p class="text-[10px] md:text-[12px] text-orange-100 font-bold uppercase tracking-[0.2em] opacity-90 truncate shadow-black/20">Masterpiece Financial Suite</p>
                     </div>
                 </div>
 
-                <button onclick="WonogiriUI.toggleModal('logoutConfirmModal')" class="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl backdrop-blur-md border border-white/30 transition-all text-xs md:text-sm group shrink-0">
-                    <i data-lucide="log-out" class="w-3.5 h-3.5 md:w-4 md:h-4 group-hover:-translate-x-1 transition-transform"></i>
-                    <span class="hidden xs:inline">Keluar</span>
-                    <span class="xs:hidden">Out</span>
-                </button>
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:flex flex-col items-end mr-2">
+                        <p class="text-[10px] font-black text-orange-200 uppercase tracking-widest leading-none">{{ user.username }}</p>
+                        <p class="text-[9px] font-bold text-white/60">Administrator</p>
+                    </div>
+                    <button onclick="WonogiriUI.toggleModal('logoutConfirmModal')" class="flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-black rounded-2xl backdrop-blur-md border border-white/20 transition-all text-xs group shadow-lg">
+                        <i data-lucide="log-out" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        <span>Keluar</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Tab Navigation -->
-            <div class="max-w-7xl mx-auto px-6 pb-6 overflow-x-auto no-scrollbar">
-                <nav class="flex flex-nowrap md:flex-wrap gap-4 min-w-max md:min-w-0">
+            <!-- Enhanced Tab Navigation -->
+            <div class="max-w-7xl mx-auto px-6 pb-6 mt-2">
+                <nav class="grid grid-cols-4 gap-2 md:gap-4">
                     <a href="{% url 'debt_management:dashboard' %}" 
-                       class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shrink-0 {% if active_tab == 'dashboard' %}tab-active{% else %}tab-inactive{% endif %}">
-                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                        Dashboard
+                       class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 md:px-6 py-2 md:py-4 rounded-2xl font-black transition-all text-[10px] md:text-sm {% if active_tab == 'dashboard' %}tab-active{% else %}tab-inactive{% endif %}">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        <span>Dashboard</span>
                     </a>
                     <button onclick="WonogiriUI.toggleModal('addDebtorModal')" 
-                       class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shrink-0 {% if active_tab == 'add_debt' %}tab-active{% else %}tab-inactive{% endif %}">
-                        <i data-lucide="plus" class="w-5 h-5"></i>
-                        Catat Utang
+                       class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 md:px-6 py-2 md:py-4 rounded-2xl font-black transition-all text-[10px] md:text-sm {% if active_tab == 'add_debt' %}tab-active{% else %}tab-inactive{% endif %}">
+                        <i data-lucide="plus-square" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        <span>Catat Utang</span>
                     </button>
                     <a href="{% url 'debt_management:debtor_list' %}" 
-                       class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shrink-0 {% if active_tab == 'debtors' %}tab-active{% else %}tab-inactive{% endif %}">
-                        <i data-lucide="users" class="w-5 h-5"></i>
-                        Daftar Utang
+                       class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 md:px-6 py-2 md:py-4 rounded-2xl font-black transition-all text-[10px] md:text-sm {% if active_tab == 'debtors' %}tab-active{% else %}tab-inactive{% endif %}">
+                        <i data-lucide="users" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        <span>Daftar Utang</span>
                     </a>
                     <a href="{% url 'debt_management:recap_view' %}" 
-                       class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shrink-0 {% if active_tab == 'recap' %}tab-active{% else %}tab-inactive{% endif %}">
-                        <i data-lucide="line-chart" class="w-5 h-5"></i>
-                        Rekap Keuangan
+                       class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 px-2 md:px-6 py-2 md:py-4 rounded-2xl font-black transition-all text-[10px] md:text-sm {% if active_tab == 'recap' %}tab-active{% else %}tab-inactive{% endif %}">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 md:w-5 md:h-5"></i>
+                        <span>Rekap</span>
                     </a>
                 </nav>
             </div>
@@ -102,6 +116,119 @@
         <main class="flex-1 max-w-7xl mx-auto w-full px-6 py-8">
             {% block content %}{% endblock %}
         </main>
+    </div>
+
+    <!-- Global Modals -->
+    
+    <!-- Add Debtor Modal (Global) -->
+    <div id="addDebtorModal" class="hidden fixed inset-0 z-[500] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onclick="WonogiriUI.toggleModal('addDebtorModal')"></div>
+        <div class="bg-white rounded-[2.5rem] w-full max-w-lg relative shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <!-- Orange Modal Header -->
+            <div class="bg-[#FF6600] p-8 flex items-center justify-between text-white">
+                <div>
+                    <h3 class="text-2xl font-black">Tambah Utang Baru</h3>
+                    <p class="text-orange-100 text-sm font-medium">Catat transaksi utang pelanggan</p>
+                </div>
+                <button onclick="WonogiriUI.toggleModal('addDebtorModal')" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center backdrop-blur-md transition-all">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Form Body -->
+            <form action="{% url 'debt_management:add_debtor' %}" method="post" enctype="multipart/form-data" class="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                {% csrf_token %}
+                
+                <!-- Photo Section (Masterpiece Live Camera Integration) -->
+                <div class="space-y-4">
+                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest">Foto Penghutang *</label>
+                    
+                    <!-- Viewfinder / Preview Area -->
+                    <div id="cameraContainer" class="relative w-full aspect-square md:aspect-video bg-gray-900 rounded-[2rem] overflow-hidden border-4 border-gray-100 shadow-inner group">
+                        <!-- Live Stream -->
+                        <video id="viewfinder" class="w-full h-full object-cover hidden" autoplay playsinline></video>
+                        
+                        <!-- Captured Preview -->
+                        <img id="capturePreview" class="w-full h-full object-cover hidden" src="">
+                        
+                        <!-- Placeholder / Mode Selector -->
+                        <div id="cameraPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center gap-4 text-gray-500">
+                            <div class="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center text-gray-600">
+                                <i data-lucide="camera-off" class="w-10 h-10"></i>
+                            </div>
+                            <p class="text-xs font-bold opacity-50">Kamera belum aktif</p>
+                        </div>
+
+                        <!-- Camera Overlay UI -->
+                        <div id="cameraUI" class="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            <div class="flex justify-center gap-4 pointer-events-auto">
+                                <button type="button" id="btnCapture" onclick="WonogiriUI.capturePhoto()" class="hidden w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl scale-90 hover:scale-100 active:scale-95 transition-all">
+                                    <div class="w-12 h-12 border-4 border-orange-500 rounded-full"></div>
+                                </button>
+                                <button type="button" id="btnRetake" onclick="WonogiriUI.initCamera()" class="hidden px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-black rounded-xl border border-white/30 transition-all text-xs">
+                                    Ulangi Foto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mode Buttons -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <button type="button" onclick="WonogiriUI.initCamera()" class="flex items-center justify-center gap-2 py-4 bg-orange-50 hover:bg-orange-100 text-orange-600 font-extrabold rounded-2xl border-2 border-orange-100 transition-all">
+                            <i data-lucide="camera" class="w-5 h-5"></i>
+                            <span class="text-xs">Ambil Foto</span>
+                        </button>
+                        <label class="flex items-center justify-center gap-2 py-4 bg-gray-50 hover:bg-gray-100 text-gray-600 font-extrabold rounded-2xl border-2 border-gray-100 cursor-pointer transition-all">
+                            <i data-lucide="upload" class="w-5 h-5"></i>
+                            <span class="text-xs">Pilih File</span>
+                            <input type="file" name="photo" id="photoInput" class="hidden" onchange="WonogiriUI.handleFileSelect(this)">
+                        </label>
+                    </div>
+                    
+                    <!-- Hidden Canvas for Processing -->
+                    <canvas id="captureCanvas" class="hidden"></canvas>
+                    <p class="text-[10px] text-gray-400 font-medium text-center italic">Izin kamera diperlukan untuk fitur verifikasi wajah penghutang.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest">Nama Lengkap *</label>
+                    <input type="text" name="name" required placeholder="Contoh: Ibu Siti Rahayu" 
+                           class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 px-5 focus:bg-white focus:border-orange-500 focus:outline-none transition-all font-medium text-gray-900 border-2">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest">Nama Panggilan (Opsional)</label>
+                    <input type="text" name="nickname" placeholder="Contoh: Bu Siti" 
+                           class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 px-5 focus:bg-white focus:border-orange-500 focus:outline-none transition-all font-medium text-gray-900 border-2">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest">Nomor Telepon (Opsional)</label>
+                    <input type="text" name="phone_number" placeholder="Contoh: 081234567890" 
+                           class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 px-5 focus:bg-white focus:border-orange-500 focus:outline-none transition-all font-medium text-gray-900 border-2">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest">Jumlah Utang *</label>
+                    <div class="relative">
+                        <span class="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-gray-400">Rp</span>
+                        <input type="number" name="initial_debt" required value="0"
+                               class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 pl-12 pr-5 focus:bg-white focus:border-orange-500 focus:outline-none transition-all font-black text-gray-900 border-2 tabular-nums">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-black text-gray-500 uppercase tracking-widest">Keterangan (Opsional)</label>
+                    <textarea name="note" rows="3" placeholder="Contoh: Beli sembako untuk acara keluarga" 
+                              class="w-full bg-gray-50 border border-gray-100 rounded-xl py-4 px-5 focus:bg-white focus:border-orange-500 focus:outline-none transition-all font-medium text-gray-900 border-2 resize-none"></textarea>
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <button type="button" onclick="WonogiriUI.toggleModal('addDebtorModal')" class="flex-1 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-black rounded-2xl transition-all">Batal</button>
+                    <button type="submit" class="flex-1 py-4 bg-orange-600 hover:bg-orange-700 text-white font-black rounded-2xl shadow-xl shadow-orange-500/30 transition-all">Simpan</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Global Logout Confirmation Modal -->

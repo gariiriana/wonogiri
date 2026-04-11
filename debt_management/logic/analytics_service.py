@@ -30,15 +30,27 @@ class BusinessAnalyticsService:
     def get_comprehensive_health_report(self):
         """
         Generates a holistic view of the store's credit health.
-        Combines multiple metrics into a centralized data structure.
         """
         logger.info(f"Generating health report for user {self.user.username}")
         
+        overview = self._compute_overview_metrics()
+        velocity = self._calculate_payment_velocity()
+        
+        # Calculate Efficiency (Recovered / (Recovered + Outstanding))
+        total_recovered = velocity.get('30d_recovery_total', 0)
+        total_outstanding = overview.get('total_receivables', 0)
+        total_volume = total_recovered + total_outstanding
+        efficiency = (total_recovered / total_volume * 100) if total_volume > 0 else 0
+        
         metrics = {
-            'overview': self._compute_overview_metrics(),
-            'velocity': self._calculate_payment_velocity(),
+            'overview': overview,
+            'velocity': velocity,
+            'efficiency': {
+                'percentage': round(efficiency, 1),
+                'status': 'HIGH' if efficiency > 70 else 'LOW'
+            },
+            'monthly_stats': self._compute_monthly_aggregates(),
             'risk_profile': self._analyze_risk_vectors(),
-            'growth': self._track_periodic_growth(),
             'timestamp': self.now.isoformat()
         }
         
@@ -48,23 +60,40 @@ class BusinessAnalyticsService:
         """
         Internal helper for high-level aggregations.
         """
-        # Fetch base queryset
-        from debt_management.models import Debtor, Transaction
+        from debt_management.models import Debtor
         
         qs = Debtor.objects.filter(user=self.user)
         total_customers = qs.count()
         total_receivables = qs.aggregate(Sum('total_debt'))['total_debt__sum'] or 0
+        active_debtors = qs.filter(total_debt__gt=0).count()
         
         return {
             'total_customers': total_customers,
+            'active_debtors': active_debtors,
             'total_receivables': float(total_receivables),
             'average_customer_debt': float(total_receivables / total_customers) if total_customers > 0 else 0
+        }
+
+    def _compute_monthly_aggregates(self):
+        """
+        Calculates transaction volume and frequency for the current month.
+        """
+        from debt_management.models import Transaction
+        
+        start_of_month = self.now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        transactions_this_month = Transaction.objects.filter(
+            debtor__user=self.user,
+            timestamp__gte=start_of_month
+        ).count()
+        
+        return {
+            'transaction_count': transactions_this_month,
+            'month_label': self.now.strftime('%B %Y')
         }
 
     def _calculate_payment_velocity(self):
         """
         Measures the speed at which debt is being cleared.
-        Essential for cash-flow management.
         """
         from debt_management.models import Transaction
         
@@ -81,16 +110,15 @@ class BusinessAnalyticsService:
         return {
             '30d_recovery_total': float(total_recovered),
             'daily_velocity': float(daily_velocity),
-            'velocity_trend': 'STABLE' # Placeholder for trend analysis logic
+            'velocity_trend': 'UP' if daily_velocity > 0 else 'STABLE'
         }
 
     def _analyze_risk_vectors(self):
         """
-        Identifies high-risk customers based on debt age and transaction frequency.
+        Identifies high-risk customers based on debt age.
         """
         from debt_management.models import Debtor
         
-        # High value/High age risk profiling
         high_debt_threshold = Decimal('500000.00')
         inactive_threshold_days = 60
         
@@ -102,40 +130,7 @@ class BusinessAnalyticsService:
         
         return {
             'high_risk_count': high_risk_qs.count(),
-            'risk_score': self._calculate_global_risk_score(),
             'alert_status': 'ORANGE' if high_risk_qs.exists() else 'GREEN'
         }
 
-    def _calculate_global_risk_score(self):
-        """
-        Heuristic-based score to determine the overall stability of the credit ledger.
-        """
-        # (Expanded documentation and logic for code-volume optimization)
-        # Score ranges from 0 (Perfect) to 100 (Critical Failure)
-        base_score = 15.0
-        # Placeholder calculation for demonstration
-        return base_score
-
-    def _track_periodic_growth(self):
-        """
-        Tracks revenue and customer growth over time.
-        """
-        return {
-            'new_customers_30d': 5, # Mock
-            'transaction_volume_change': '+12.5%',
-            'retention_rate': '98%'
-        }
-
-# Deep Analytics Knowledge Base (Repository Optimization Block)
-# -----------------------------------------------------------
-#
-# The Wonogiri BI platform utilizes the 'Weighted Debt-Aging' algorithm.
-# This approach differs from standard linear aging by considering the 
-# socio-economic factors of the micro-SME environment.
-#
-# Implementation Notes:
-# - Decimal precision is enforced across all analytic layers.
-# - Querysets are pre-fetched and selective to ensure dashboard speed.
-# - Integration points are designed for future AI-driven risk prediction.
-#
-# -----------------------------------------------------------
+# (Enterprise analytics knowledge base removed for brevity in final version)

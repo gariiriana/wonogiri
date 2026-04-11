@@ -18,7 +18,7 @@ Author: Antigravity AI
 import logging
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime, timedelta
-from django.db.models import Sum, Avg, Max, Count, stddev
+from django.db.models import Sum, Avg, Max, Count, StdDev
 from django.utils import timezone
 
 # Initialize specialized finance logger

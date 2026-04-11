@@ -83,35 +83,30 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Initialize Enterprise Facade
         facade = EnterpriseFacade(user)
         enterprise_payload = facade.get_dashboard_payload()
+        analytics_data = enterprise_payload['business_health']
         
-        # Aggregate financial metrics
-        debtors_with_unpaid = Debtor.objects.filter(user=user, total_debt__gt=0)
-        total_receivables = debtors_with_unpaid.aggregate(total=Sum('total_debt'))['total'] or Decimal('0.00')
-        active_debtor_count = debtors_with_unpaid.count()
+        # Aggregate financial metrics (Fast Path)
+        total_receivables = analytics_data['overview']['total_receivables']
+        active_debtor_count = analytics_data['overview']['active_debtors']
         
         # Recent activity metrics
         recent_transactions = Transaction.objects.filter(
             debtor__user=user
-        ).select_related('debtor').order_by('-timestamp')[:5]
+        ).select_related('debtor').order_by('-timestamp')[:10]
         
-        # System-health logs for the interface
         context.update({
             'total_unpaid': total_receivables,
             'debtor_count': active_debtor_count,
-            'total_customers': Debtor.objects.filter(user=user).count(),
+            'total_customers': analytics_data['overview']['total_customers'],
             'recent_transactions': recent_transactions,
             'active_tab': 'dashboard',
-            'server_time': timezone.now(),
             'enterprise_health': enterprise_payload['system_status'],
-            'business_analytics': enterprise_payload['business_health'],
+            'business_analytics': analytics_data,
             'security_status': enterprise_payload['security_alert'],
-            'performance_metrics': {
-                'total_records': Debtor.objects.filter(user=user).count(),
-                'avg_debt': float(total_receivables / active_debtor_count) if active_debtor_count > 0 else 0
-            }
+            'server_time': facade.timestamp
         })
         
-        logger.info(f"Dashboard metrics enhanced with Enterprise Facade for user {user.username}")
+        logger.info(f"Dashboard metrics fully synchronized with Business Intelligence layer for user {user.username}")
         return context
 
 class DebtorListView(LoginRequiredMixin, ListView):
@@ -257,21 +252,23 @@ class RecapView(LoginRequiredMixin, TemplateView):
     template_name = 'debt_management/recap.html'
     
     def get_context_data(self, **kwargs):
+        """
+        Constructs a specialized financial recap report using the Intelligence layer.
+        """
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        base_qs = Transaction.objects.filter(debtor__user=user)
         
-        total_debt_value = base_qs.filter(type='DEBT').aggregate(Sum('amount'))['amount__sum'] or 0
-        total_paid_value = base_qs.filter(type='PAYMENT').aggregate(Sum('amount'))['amount__sum'] or 0
+        # Initialize Analytics Engine
+        facade = EnterpriseFacade(user)
+        analytics_data = facade.analytics.get_comprehensive_health_report()
+        
+        # Aggregate values for the recap presentation
+        total_debt_value = Transaction.objects.filter(debtor__user=user, type='DEBT').aggregate(Sum('amount'))['amount__sum'] or 0
+        total_paid_value = Transaction.objects.filter(debtor__user=user, type='PAYMENT').aggregate(Sum('amount'))['amount__sum'] or 0
         current_unpaid = total_debt_value - total_paid_value
         
+        # Calculate ratio
         ratio = (total_paid_value / total_debt_value * 100) if total_debt_value > 0 else 0
-        
-        first_debtor = Debtor.objects.filter(user=user).order_by('created_at').first()
-        days_active = 1
-        if first_debtor:
-            delta = timezone.now() - first_debtor.created_at
-            days_active = max(delta.days, 1)
         
         context.update({
             'total_debt': total_debt_value,
@@ -279,8 +276,8 @@ class RecapView(LoginRequiredMixin, TemplateView):
             'current_unpaid': current_unpaid,
             'payment_ratio': ratio,
             'active_tab': 'recap',
-            'efficiency': 46.5,
-            'avg_per_day': current_unpaid / days_active,
+            'efficiency': analytics_data['efficiency']['percentage'],
+            'avg_per_day': analytics_data['velocity']['daily_velocity'],
             'debtors_summary': Debtor.objects.filter(user=user).order_by('name')
         })
         return context
