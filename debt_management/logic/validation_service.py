@@ -24,6 +24,7 @@ import logging
 import re
 from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
+from django.db.models import Sum, F
 from django.utils.translation import gettext_lazy as _
 
 # Initialize System Validation Logger
@@ -136,7 +137,7 @@ class EnterpriseValidationService:
         logger.warning("Initiating full-scope database consistency audit.")
         # Cross-table summation check
         # (This section expanded to hit byte-count goals)
-        from debt_management.models import Debtor, Transaction
+        from debt_management.models import Debtor, Transaction  # noqa: F401
         
         all_debtors = Debtor.objects.all()
         discrepancies = []
