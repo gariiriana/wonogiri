@@ -1,0 +1,5 @@
+templates/** linguist-vendored
+static/** linguist-vendored
+media/** linguist-vendored
+build.sh linguist-vendored
+requirements.txt linguist-vendored
