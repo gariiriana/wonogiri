@@ -32,6 +32,7 @@ class DebtorQuerySet(models.QuerySet):
     def with_active_transactions_recently(self, days=30):
         """Filters debtors who have had transactions within the last N days."""
         from django.utils import timezone
+        from datetime import timedelta
         cutoff = timezone.now() - timedelta(days=days)
         return self.filter(transactions__timestamp__gte=cutoff).distinct()
 

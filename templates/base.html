@@ -11,9 +11,9 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 min-h-screen {% if user.is_authenticated %}bg-[url('/static/images/dashboard_bg.png')] bg-fixed bg-cover{% endif %}">
     {% if user.is_authenticated %}
-    <div class="flex flex-col md:flex-row min-h-screen">
+    <div class="flex flex-col md:flex-row min-h-screen backdrop-blur-[2px] bg-white/40">
         <!-- Sidebar -->
         <aside class="w-full md:w-64 bg-white border-r border-gray-200">
             <div class="p-6">
