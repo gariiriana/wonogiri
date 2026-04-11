@@ -1,5 +1,11 @@
 templates/** linguist-vendored
 static/** linguist-vendored
 media/** linguist-vendored
+wonogiri_project/** linguist-vendored
 build.sh linguist-vendored
 requirements.txt linguist-vendored
+vercel.json linguist-vendored
+manage.py linguist-vendored
+.gitignore linguist-vendored
+.gitattributes linguist-vendored
+README.md linguist-documentation
