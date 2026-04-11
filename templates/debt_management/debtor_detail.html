@@ -3,18 +3,18 @@
 {% block content %}
 <div class="space-y-6 animate-in slide-in-from-bottom-6 duration-700 pb-32 md:pb-0">
     <!-- Profile Card (Matching Screenshot 6) -->
-    <div class="bg-white rounded-[2.5rem] shadow-2xl border border-white/50 overflow-hidden">
-        <div class="p-10 flex flex-col md:flex-row items-center gap-8">
-            <div class="w-32 h-32 bg-gray-100 rounded-[2.5rem] flex items-center justify-center text-gray-400 overflow-hidden shrink-0 shadow-inner">
+    <div class="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-2xl border border-white/50 overflow-hidden">
+        <div class="p-6 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-8">
+            <div class="w-24 h-24 md:w-32 md:h-32 bg-gray-100 rounded-[2rem] md:rounded-[2.5rem] flex items-center justify-center text-gray-400 overflow-hidden shrink-0 shadow-inner">
                 {% if debtor.photo %}
                 <img src="{{ debtor.photo.url }}" class="w-full h-full object-cover">
                 {% else %}
-                <i data-lucide="user" class="w-16 h-16"></i>
+                <i data-lucide="user" class="w-12 h-12 md:w-16 md:h-16"></i>
                 {% endif %}
             </div>
-            <div class="flex-1 text-center md:text-left space-y-4">
+            <div class="flex-1 text-center md:text-left space-y-3 md:space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-4xl font-black text-gray-900 tracking-tight">{{ debtor.name }}</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-gray-900 tracking-tight leading-tight">{{ debtor.name }}</h2>
                     <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
                         <span class="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-black uppercase rounded">{{ debtor.nickname|default:"-" }}</span>
                         <span class="px-3 py-1 bg-purple-50 text-purple-600 text-[10px] font-black uppercase rounded flex items-center gap-1">
@@ -23,7 +23,7 @@
                         </span>
                     </div>
                 </div>
-                <p class="text-sm font-bold text-gray-400">Terakhir transaksi: {{ debtor.updated_at|date:"d M Y" }}</p>
+                <p class="text-[11px] md:text-sm font-bold text-gray-400">Terakhir transaksi: {{ debtor.updated_at|date:"d M Y" }}</p>
             </div>
         </div>
     </div>
@@ -100,20 +100,22 @@
         </div>
     </div>
 
-    <!-- Floating Action Buttons (Matching Screenshot 6) -->
-    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6 flex flex-col md:flex-row gap-4 z-50">
-        <button onclick="toggleModal('addTransactionModal')" class="flex-1 py-5 bg-[#FF6600] hover:bg-orange-700 text-white font-black rounded-2xl shadow-2xl flex items-center justify-center gap-3 transition-all active:scale-95 group">
-            <i data-lucide="plus" class="w-6 h-6 group-hover:rotate-90 transition-transform"></i>
-            Tambah Utang
-        </button>
-        <button onclick="toggleModal('paymentMethodModal')" class="flex-1 py-5 bg-[#00CE63] hover:bg-green-700 text-white font-black rounded-2xl shadow-2xl flex items-center justify-center gap-3 transition-all active:scale-95 group">
-            <i data-lucide="check" class="w-6 h-6 group-hover:scale-125 transition-transform"></i>
-            Bayar / Lunas
-        </button>
-        <button onclick="toggleModal('deleteConfirmModal')" class="flex-1 py-5 bg-[#FF2D55] hover:bg-red-700 text-white font-black rounded-2xl shadow-2xl flex items-center justify-center gap-3 transition-all active:scale-95 group">
-            <i data-lucide="trash-2" class="w-6 h-6 group-hover:shake transition-transform"></i>
-            Hapus Pelanggan
-        </button>
+    <!-- Floating Action Buttons (Sticky Bottom Navigation) -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 md:p-8 flex justify-center z-50 pointer-events-none">
+        <div class="w-full max-w-4xl grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 pointer-events-auto">
+            <button onclick="WonogiriUI.toggleModal('addTransactionModal')" class="flex-1 py-4 md:py-5 bg-[#FF6600] hover:bg-orange-700 text-white font-black rounded-2xl shadow-2xl flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 group">
+                <i data-lucide="plus" class="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-90 transition-transform"></i>
+                <span class="text-xs md:text-base">Utang</span>
+            </button>
+            <button onclick="WonogiriUI.toggleModal('paymentMethodModal')" class="flex-1 py-4 md:py-5 bg-[#00CE63] hover:bg-green-700 text-white font-black rounded-2xl shadow-2xl flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 group">
+                <i data-lucide="check" class="w-5 h-5 md:w-6 md:h-6 group-hover:scale-125 transition-transform"></i>
+                <span class="text-xs md:text-base">Bayar</span>
+            </button>
+            <button onclick="WonogiriUI.toggleModal('deleteConfirmModal')" class="col-span-2 md:col-span-1 py-4 md:py-5 bg-[#FF2D55] hover:bg-red-700 text-white font-black rounded-2xl shadow-2xl flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 group">
+                <i data-lucide="trash-2" class="w-5 h-5 md:w-6 md:h-6 group-hover:shake transition-transform"></i>
+                <span class="text-xs md:text-base">Hapus</span>
+            </button>
+        </div>
     </div>
 </div>
 

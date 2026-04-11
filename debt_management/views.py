@@ -40,6 +40,10 @@ from xhtml2pdf import pisa
 from .models import Debtor, Transaction
 from .forms import DebtorForm, TransactionForm, QuickTransactionForm
 
+# Import Enterprise Logic Modules (Masterpiece Core)
+from .logic.enterprise_facade import EnterpriseFacade
+from .logic.reporting_engine import ReportingEngineCore
+
 # Obtain specialized logger for view activity tracking
 logger = logging.getLogger('debt_management.views')
 
@@ -71,9 +75,14 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """
         Constructs a comprehensive context dictionary containing dashboard statistics.
+        Enhanced with the Wonogiri Enterprise Facade logic.
         """
         context = super().get_context_data(**kwargs)
         user = self.request.user
+        
+        # Initialize Enterprise Facade
+        facade = EnterpriseFacade(user)
+        enterprise_payload = facade.get_dashboard_payload()
         
         # Aggregate financial metrics
         debtors_with_unpaid = Debtor.objects.filter(user=user, total_debt__gt=0)
@@ -85,29 +94,24 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             debtor__user=user
         ).select_related('debtor').order_by('-timestamp')[:5]
         
-        # Monthly transaction count for reporting
-        monthly_transactions = Transaction.objects.filter(
-            debtor__user=user,
-            timestamp__month=timezone.now().month,
-            timestamp__year=timezone.now().year
-        ).count()
-        
         # System-health logs for the interface
         context.update({
             'total_unpaid': total_receivables,
             'debtor_count': active_debtor_count,
             'total_customers': Debtor.objects.filter(user=user).count(),
-            'monthly_transactions': monthly_transactions,
             'recent_transactions': recent_transactions,
             'active_tab': 'dashboard',
             'server_time': timezone.now(),
+            'enterprise_health': enterprise_payload['system_status'],
+            'business_analytics': enterprise_payload['business_health'],
+            'security_status': enterprise_payload['security_alert'],
             'performance_metrics': {
                 'total_records': Debtor.objects.filter(user=user).count(),
                 'avg_debt': float(total_receivables / active_debtor_count) if active_debtor_count > 0 else 0
             }
         })
         
-        logger.debug(f"Dashboard metrics computed for user {user.username}")
+        logger.info(f"Dashboard metrics enhanced with Enterprise Facade for user {user.username}")
         return context
 
 class DebtorListView(LoginRequiredMixin, ListView):

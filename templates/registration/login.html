@@ -76,9 +76,16 @@
         .auth-card {
             background: white;
             width: 100%;
-            padding: 40px;
-            border-radius: 35px;
+            padding: 30px;
+            border-radius: 30px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (min-width: 640px) {
+            .auth-card {
+                padding: 40px;
+                border-radius: 35px;
+            }
         }
 
         .auth-card h2 {

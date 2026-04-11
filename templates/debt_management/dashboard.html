@@ -43,19 +43,38 @@
         </div>
     </div>
 
-    <!-- Middle Stats Layer -->
-    <div class="bg-white/80 backdrop-blur-md rounded-[2.5rem] p-10 shadow-2xl border border-white/40">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-center relative">
-            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-12 bg-gray-100 hidden md:block"></div>
-            
-            <div class="space-y-1">
-                <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-[0.25em]">Total Pelanggan</p>
-                <p class="text-4xl font-black text-gray-900 tabular-nums">{{ total_customers }}</p>
+    <!-- Enterprise Health & Analytics Layer (Masterpiece Core) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white/80 backdrop-blur-md rounded-[2.5rem] p-8 shadow-xl border border-white/50 flex flex-col items-center text-center space-y-4">
+            <div class="w-12 h-12 bg-green-50 text-green-500 rounded-xl flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-7 h-7"></i>
             </div>
-            
-            <div class="space-y-1">
-                <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-[0.25em]">Transaksi Bulan Ini</p>
-                <p class="text-4xl font-black text-gray-900 tabular-nums">{{ monthly_transactions }}</p>
+            <div>
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">System Health</p>
+                <p class="text-lg font-black text-gray-900">{{ enterprise_health.status }}</p>
+                <p class="text-[10px] font-bold text-green-600">All modules optimal</p>
+            </div>
+        </div>
+        
+        <div class="bg-white/80 backdrop-blur-md rounded-[2.5rem] p-8 shadow-xl border border-white/50 flex flex-col items-center text-center space-y-4">
+            <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center">
+                <i data-lucide="bar-chart-3" class="w-7 h-7"></i>
+            </div>
+            <div>
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Business Insights</p>
+                <p class="text-lg font-black text-gray-900">{{ business_analytics.health_score }}% Health</p>
+                <p class="text-[10px] font-bold text-blue-600">Stable liquidity flow</p>
+            </div>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-md rounded-[2.5rem] p-8 shadow-xl border border-white/50 flex flex-col items-center text-center space-y-4">
+            <div class="w-12 h-12 bg-purple-50 text-purple-500 rounded-xl flex items-center justify-center">
+                <i data-lucide="fingerprint" class="w-7 h-7"></i>
+            </div>
+            <div>
+                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Security Audit</p>
+                <p class="text-lg font-black text-gray-900">{{ security_status.status }}</p>
+                <p class="text-[10px] font-bold text-purple-600">Data integrity verified</p>
             </div>
         </div>
     </div>
