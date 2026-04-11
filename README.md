@@ -9,14 +9,17 @@
 Proyek ini telah melalui transformasi arsitektur dari *Client-Side Architecture* ke *Server-Side Architecture* yang jauh lebih stabil dan mudah dimaintain.
 
 ### 🐍 Backend (The Engine)
+
 - **Django 6.0+**: Framework Python tingkat tinggi yang mengutamakan keamanan dan kecepatan pengembangan.
 - **Python 3.12**: Bahasa pemrograman yang sangat kuat untuk pengolahan data dan logika bisnis.
 - **Django ORM**: Memastikan integritas data transaksi dan pelanggan tetap terjaga.
 
 ### 💾 Database (The Storage)
+
 - **SQLite 3**: Database relasional yang ringan dan efisien untuk penyimpanan lokal data piutang.
 
 ### 🎨 Frontend & UI (The Face)
+
 - **Django Templates (MTV)**: Sistem engine template yang dinamis untuk penyajian data dari server.
 - **Tailwind CSS**: Framework CSS revolusioner untuk interface yang modern, bersih, dan responsif (Mobile Friendly).
 - **Lucide Icons**: Set ikon yang cantik dan konsisten untuk navigasi yang lebih intuitif.
@@ -50,18 +53,21 @@ Proyek ini telah melalui transformasi arsitektur dari *Client-Side Architecture*
 ## 🛠️ Cara Menjalankan Project
 
 1. **Install Python & Django**:
+
    ```bash
    pip install django pillow
    ```
 
 2. **Jalankan Aplikasi**:
+
    ```bash
    python manage.py runserver
    ```
 
 3. **Login Akses**:
+
    Gunakan akun admin yang telah dikonfigurasi sebelumnya untuk akses penuh ke dashboard.
 
 ---
 
-**Built with pride for the local business community. 🚀**
+### Built with pride for the local business community. 🚀
