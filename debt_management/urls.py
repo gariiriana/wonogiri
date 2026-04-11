@@ -4,11 +4,12 @@ from . import views
 app_name = 'debt_management'
 
 urlpatterns = [
-    path('', views.dashboard, name='dashboard'),
-    path('debtors/', views.debtor_list, name='debtor_list'),
-    path('debtors/<int:pk>/', views.debtor_detail, name='debtor_detail'),
-    path('debtors/add/', views.add_debtor, name='add_debtor'),
-    path('debtors/<int:pk>/add-transaction/', views.add_transaction, name='add_transaction'),
+    path('', views.DashboardView.as_view(), name='dashboard'),
+    path('debtors/', views.DebtorListView.as_view(), name='debtor_list'),
+    path('debtors/<int:pk>/', views.DebtorDetailView.as_view(), name='debtor_detail'),
+    path('debtors/add/', views.DebtorCreateView.as_view(), name='add_debtor'),
+    path('debtors/<int:pk>/edit/', views.DebtorUpdateView.as_view(), name='edit_debtor'),
+    path('debtors/<int:pk>/transaction/', views.ProcessTransactionView.as_view(), name='add_transaction'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
 ]
