@@ -1,73 +1,187 @@
 # 🏪 Wonogiri - Smart Debt Management System
 
-**Wonogiri** adalah sistem manajemen catatan piutang (utang pelanggan) yang dirancang khusus untuk pemilik warung, toko kelontong, atau bisnis kecil. Aplikasi ini memodernisasi cara pencatatan utang yang dulunya manual (buku hutang) menjadi sistem digital yang aman, rapi, dan transparan.
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-6.0-092E20?style=flat&logo=django&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Cloud-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v3-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?style=flat&logo=vercel&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
+
+**Wonogiri** adalah sistem manajemen catatan piutang (utang pelanggan) yang dirancang khusus untuk pemilik warung, toko kelontong, atau bisnis kecil. Aplikasi ini memodernisasi cara pencatatan utang yang dulunya manual *(buku hutang)* menjadi sistem digital yang **aman, rapi, dan transparan**.
 
 ---
 
-## 🚀 Core Technology Stack
+## ✨ Fitur Unggulan
 
-Proyek ini telah melalui transformasi arsitektur dari *Client-Side Architecture* ke *Server-Side Architecture* yang jauh lebih stabil dan mudah dimaintain.
-
-### 🐍 Backend (The Engine)
-
-- **Django 6.0+**: Framework Python tingkat tinggi yang mengutamakan keamanan dan kecepatan pengembangan.
-- **Python 3.12**: Bahasa pemrograman yang sangat kuat untuk pengolahan data dan logika bisnis.
-- **Django ORM**: Memastikan integritas data transaksi dan pelanggan tetap terjaga.
-
-### 💾 Database (The Storage)
-
-- **SQLite 3**: Database relasional yang ringan dan efisien untuk penyimpanan lokal data piutang.
-
-### 🎨 Frontend & UI (The Face)
-
-- **Django Templates (MTV)**: Sistem engine template yang dinamis untuk penyajian data dari server.
-- **Tailwind CSS**: Framework CSS revolusioner untuk interface yang modern, bersih, dan responsif (Mobile Friendly).
-- **Lucide Icons**: Set ikon yang cantik dan konsisten untuk navigasi yang lebih intuitif.
+| Fitur | Deskripsi |
+| --- | --- |
+| 👥 **Manajemen Pelanggan** | Simpan data pelanggan lengkap dengan foto profil untuk verifikasi visual |
+| 💳 **Pencatatan Transaksi Ganda** | Catat penambahan utang & pembayaran dalam satu dashboard terpadu |
+| 📊 **Statistik Real-time** | Pantau total piutang aktif dan jumlah pelanggan secara langsung |
+| 🔒 **Autentikasi Aman** | Sistem login terpusat untuk melindungi privasi data keuangan |
+| 🤖 **Predictive Modeling** | Analisis prediktif berbasis data historis transaksi pelanggan |
+| 🧠 **Behavioral Analysis** | Deteksi pola pembayaran dan perilaku keuangan pelanggan |
+| 💰 **Cashflow Optimizer** | Optimasi arus kas dan rekomendasi prioritas penagihan |
+| 🏥 **System Health Monitor** | Pemantauan kesehatan sistem secara otomatis dan real-time |
+| 📋 **Reporting Engine** | Laporan keuangan terstruktur dan ekspor data yang komprehensif |
+| 🗄️ **Data Migration Service** | Layanan migrasi dan pemeliharaan integritas data enterprise |
 
 ---
 
-## 🎯 Fitur Unggulan
+## 🚀 Technology Stack
 
-- **Manajemen Pelanggan**: Simpan data pelanggan lengkap dengan foto untuk verifikasi yang lebih akurat.
-- **Pencatatan Transaksi Ganda**: Catat penambahan utang maupun pembayaran dengan mudah dalam satu dashboard.
-- **Statistik Dashboard**: Pantau total piutang yang beredar dan jumlah pelanggan aktif secara real-time.
-- **Autentikasi Aman**: Sistem login terpusat untuk menjaga privasi data keuangan warung.
+### 🐍 Backend
+
+- **Django 6.0.4** — High-level Python web framework dengan arsitektur MTV yang matang
+- **Python 3.12** — Bahasa pemrograman utama untuk seluruh logika bisnis
+- **Gunicorn 25.3** — Production-grade WSGI server untuk deployment yang stabil
+- **WhiteNoise 6.12** — Static file serving yang efisien untuk lingkungan produksi
+
+### 💾 Database
+
+- **PostgreSQL** *(Production)* — Relational database enterprise via `psycopg` untuk cloud deployment
+- **SQLite 3** *(Development)* — Database lokal ringan untuk lingkungan pengembangan
+- **dj-database-url** — Konfigurasi database URL-based yang fleksibel
+
+### 🎨 Frontend & UI
+
+- **Django Templates (MTV)** — Server-side rendering untuk penyajian data yang cepat
+- **Tailwind CSS v3** — Utility-first CSS framework untuk UI yang modern dan responsif
+- **Lucide Icons** — Set ikon SVG yang konsisten dan cantik
+- **Pillow 12.2** — Pemrosesan gambar untuk manajemen foto pelanggan
+
+### ☁️ Deployment & DevOps
+
+- **Vercel** — Platform deployment serverless dengan CDN global
+- **python-dotenv** — Manajemen environment variables yang aman
+- **build.sh** — Automated build script untuk proses deployment
 
 ---
 
-## 📁 Struktur Arsitektur
+## 🧠 Arsitektur Enterprise
 
-```bash
- wonogiri/
- ├── wonogiri_project/   # Jantung Konfigurasi (Settings & Root Routing)
- ├── debt_management/    # Logika Sistem (Models, Logic, & Business Views)
- ├── templates/          # Unified UI Layer (HTML & Responsive Layouts)
- ├── static/             # Assets & Design Utilities
- ├── media/              # Penyimpanan Identitas Visual (Foto Pelanggan)
- ├── manage.py           # Command Line Interface Utama
- └── db.sqlite3          # Database Management System
+Wonogiri dirancang dengan arsitektur **Server-Side Enterprise** yang modular dan scalable:
+
+```text
+wonogiri/
+├── wonogiri_project/           # ⚙️  Konfigurasi Inti (Settings & Root Routing)
+│   ├── settings.py             #     Konfigurasi global & environment
+│   ├── urls.py                 #     Root URL dispatcher
+│   └── wsgi.py                 #     WSGI application entry point
+│
+├── debt_management/            # 🏛️  Domain Utama Bisnis
+│   ├── models.py               #     Data models & ORM schema
+│   ├── views.py                #     Request handlers & business logic
+│   ├── signals.py              #     Django signals & event hooks
+│   └── logic/                  # 🧩  Modular Business Logic Layer
+│       ├── predictive_modeling.py      # Analisis prediktif transaksi
+│       ├── behavioral_analysis.py      # Analisis perilaku pelanggan
+│       ├── cashflow_optimizer.py       # Optimasi arus kas
+│       ├── finance_engine.py           # Mesin kalkulasi keuangan
+│       ├── reporting_engine.py         # Generator laporan keuangan
+│       ├── enterprise_logger.py        # Sistem logging enterprise
+│       ├── system_health.py            # Monitor kesehatan sistem
+│       ├── data_migration_service.py   # Layanan migrasi data
+│       ├── metadata_manager.py         # Manajemen metadata
+│       └── global_exception_handler.py # Penanganan error terpusat
+│
+├── templates/                  # 🎨  UI Layer (HTML & Layouts)
+├── static/                     # 📦  Static Assets & Design Utilities
+├── media/                      # 🖼️  Penyimpanan Foto Pelanggan
+├── manage.py                   # 🖥️  Django Management CLI
+└── requirements.txt            # 📋  Daftar Dependensi Python
 ```
 
 ---
 
-## 🛠️ Cara Menjalankan Project
+## 🛠️ Cara Menjalankan Secara Lokal
 
-1. **Install Python & Django**:
+### Prasyarat
 
-   ```bash
-   pip install django pillow
-   ```
+- Python 3.12+
+- pip (Python Package Manager)
 
-2. **Jalankan Aplikasi**:
+### Langkah Instalasi
 
-   ```bash
-   python manage.py runserver
-   ```
+**1. Clone repository:**
 
-3. **Login Akses**:
+```bash
+git clone https://github.com/GariIriana/wonogiri.git
+cd wonogiri
+```
 
-   Gunakan akun admin yang telah dikonfigurasi sebelumnya untuk akses penuh ke dashboard.
+**2. Buat & aktifkan virtual environment:**
+
+```bash
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# macOS / Linux
+source venv/bin/activate
+```
+
+**3. Install semua dependensi:**
+
+```bash
+pip install -r requirements.txt
+```
+
+**4. Konfigurasi environment variables:**
+
+```bash
+# Buat file .env dan isi variabel berikut:
+SECRET_KEY=your-secret-key-here
+DEBUG=True
+DATABASE_URL=sqlite:///db.sqlite3
+```
+
+**5. Jalankan migrasi database:**
+
+```bash
+python manage.py migrate
+```
+
+**6. Buat akun superuser:**
+
+```bash
+python manage.py createsuperuser
+```
+
+**7. Jalankan development server:**
+
+```bash
+python manage.py runserver
+```
+
+Akses aplikasi di **`http://127.0.0.1:8000`** 🎉
 
 ---
 
-### Built with pride for the local business community. 🚀
+## 🌐 Deployment (Vercel)
+
+Proyek ini dikonfigurasi untuk deployment otomatis ke **Vercel**:
+
+```bash
+# Script build yang digunakan Vercel:
+bash build.sh
+```
+
+Pastikan variabel berikut sudah dikonfigurasi di Vercel Environment Variables:
+
+- `SECRET_KEY` — Django secret key
+- `DATABASE_URL` — PostgreSQL connection string
+- `DEBUG` — Set ke `False` untuk produksi
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dilisensikan di bawah **MIT License** — bebas digunakan dan dimodifikasi untuk keperluan apapun.
+
+---
+
+**Built with ❤️ for the local business community**
+
+*Digitizing warung, one transaction at a time. 🏪*
